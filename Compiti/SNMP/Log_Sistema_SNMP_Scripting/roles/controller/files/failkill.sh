@@ -18,5 +18,9 @@ while getopts ${OPTSTRING} opt; do
 done
 
 for host in $FILE ; do 
-    val=$(bash failcount.sh | rev | cut -f1 -d: | rev | tr -d ' ')
+    val=$(bash failcount.sh $host | rev | cut -f1 -d: | rev | tr -d ' ')
+    if [[ $val -gt $SOGLIA ]]; then
+        ssh -o "StrictHostKeyChecking no" $host
+        shutdown now
+    fi
 done

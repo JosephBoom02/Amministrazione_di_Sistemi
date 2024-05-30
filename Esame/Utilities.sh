@@ -1372,5 +1372,6 @@ while getopts ${OPTSTRING} opt; do
   esac
 done
 
-
+## Saltare la verifica dell'host nel file known_hosts in ssh
+ssh -o "StrictHostKeyChecking no" $host
 
