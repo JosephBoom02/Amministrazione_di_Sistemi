@@ -1,0 +1,1 @@
+echo "local1.=info  /var/log/sd.log" > /etc/rsyslog.d/mylog.service.conf

@@ -1,0 +1,7 @@
+[Unit]
+Description=Servizio di monitoraggio
+Requires=mylog.service
+
+[Service]
+Type=simple
+ExecStart=mymon.service.sh

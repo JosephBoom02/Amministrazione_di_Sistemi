@@ -1,0 +1,9 @@
+[Unit]
+Description=Add rule to rsyslog
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/mylog.service.add.sh
+ExecStop=/usr/sbin/mylog.service.stop.sh
+ExecStop=sh -c 'systemctl stop mymon.service'
+WantedBy=mymon.service 

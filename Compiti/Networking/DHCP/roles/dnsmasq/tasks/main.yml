@@ -1,0 +1,16 @@
+---
+- name: Update apt
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install dnsmasq
+  ansible.builtin.apt:
+    name: dnsmasq
+    state: present
+
+- name: Configure dnsmasq for LAN1
+  ansible.builtin.copy:
+    src: lan1
+    dest: /etc/dnsmasq.d/lan1.conf
+    mode: '0644'
+  notify: Restart dnsmasq

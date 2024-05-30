@@ -1,0 +1,4 @@
+ls -R / 2>/dev/null | egrep -i '\.[a-z]+$' | rev | cut -f1 -d. | rev | sort | uniq -c | sort -nr | head -n5
+
+Comando che cerca determinate estensioni:
+ls -R / 2>/dev/null | egrep '\.(png|gz)$' | rev | cut -f1 -d. | rev | sort |uniq -c

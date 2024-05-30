@@ -1,0 +1,19 @@
+---
+- hosts: agent
+  become: true
+  roles:
+   - common
+   - netagent
+
+- hosts: router
+  become: true
+  roles:
+   - common
+   - netr1
+   - ipforward
+
+- hosts: manager
+  become: true
+  roles:
+   - common
+   - netmanager

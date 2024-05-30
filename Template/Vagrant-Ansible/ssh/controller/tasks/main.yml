@@ -1,0 +1,22 @@
+---
+- name: Copy a new eth1 configuration "interfaces" file into place, after passing validation with ifup
+  ansible.builtin.copy:
+    src: r1eth1
+    dest: /etc/network/interfaces.d/eth1
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart Networking
+
+- name: Copy private key
+  ansible.builtin.copy:
+    src: id_rsa
+    dest: /home/vagrant/.ssh/id_rsa
+
+- name: Copy public key
+  ansible.builtin.copy:
+    src: id_rsa.pub
+    dest: /home/vagrant/.ssh/id_rsa.pub
+
+- name: Add agent key to authorized_keys
+  ansible.builtin.lineinfile:
+    path: /home/vagrant/.ssh/authorized_keys
+    line: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDcj29EPmwXFlAmkng92BFjDaoso1bCWv+2Z1QgLZZNF2+lAOlQf+TOpCcGwoO1a+oj7Amz1LnsPdzaFHtVYjSaFa8LQgxZWmKEWPbOroMk4ShESYfCvMlBQfNr7oC1EXu8L+s0aHxNWvHSGeqV+/X3b5sGIMWSSdF46VSpOArLC0gIY7/omMejK9NukNCw6SDTf8dUnYF6VZ0MElVJoa1fjvL9wcc4mW+1SSHROP3BOIsMB6SnboIvvuddT2DkfqY4oatpb3uT7rGGEPecOKQnkU40YcFK8z/Ey+A3YHKtQaRm7E+gV0tSJHTMROxSbV/qod/kxyI9Pqw2yf+qML59E19fSa+kelNj4w+BZ+Fna/9xeaIbv2PqYnC108WiLYfwHgXYirgh5enhNbZctKgO1h/iqfcD6ae1aFrcqoKdPmBE/+Zs8D3+zl1xA8HbJ6NEDzMXFc/puZ1VFTYw8auBhJjmd3FQjeh9WZSjxsvVrYq0kSt5ViZlGxfjcSj/z/M= vagrant@agent1

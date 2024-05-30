@@ -1,0 +1,56 @@
+---
+- name: Configure eth1
+  ansible.builtin.copy:
+    src: eth1
+    dest: /etc/network/interfaces.d/eth1
+    mode: '0644'
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart Networking
+
+- name: Install snmpd & tcpdump
+  ansible.builtin.apt:
+    name: [ snmpd, tcpdump ]
+    state: present
+
+- name: Copy snmpd.conf
+  ansible.builtin.copy:
+    src: snmpd.conf
+    dest: /etc/snmp/snmpd.conf
+    mode: '0644'
+
+- name: Restart snmpd.service
+  ansible.builtin.service:
+    name: snmpd
+    state: restarted
+
+- name: Copy createdump.sh
+  ansible.builtin.copy:
+    src: createdump.sh
+    dest: /home/vagrant/createdump.sh
+    mode: '0644'
+
+- name: Make snmp run the script with sudo
+  ansible.builtin.lineinfile:
+    line: Debian-snmp ALL=NOPASSWD:/usr/bin/bash /home/vagrant/createdump.sh
+    path: /etc/sudoers
+
+- name: Make snmp run tcpdump with sudo
+  ansible.builtin.lineinfile:
+    line: Debian-snmp ALL=NOPASSWD:/usr/bin/tcpdump -ttttnnr /root/out.pcap
+    path: /etc/sudoers
+
+- name: Make snmp run rm with sudo
+  ansible.builtin.lineinfile:
+    line: Debian-snmp ALL=NOPASSWD:/usr/bin/rm /root/out.pcap
+    path: /etc/sudoers
+
+- name: Copy ssh private key
+  ansible.builtin.copy:
+    src: ssh-key
+    dest: /home/vagrant/.ssh/ftransfer-key
+
+- name: Copy ssh public key
+  ansible.builtin.copy:
+    src: ssh-key.pub
+    dest: /home/vagrant/.ssh/ftransfer-key.pub
+

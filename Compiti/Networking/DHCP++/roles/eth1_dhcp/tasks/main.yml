@@ -1,0 +1,9 @@
+---
+- name: Configure eth1
+  ansible.builtin.copy:
+    src: eth1
+    dest: /etc/network/interfaces.d/eth1
+    mode: '0644'
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart Networking
+  notify: Force DHCP request

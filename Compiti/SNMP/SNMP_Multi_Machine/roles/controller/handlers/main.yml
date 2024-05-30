@@ -1,0 +1,26 @@
+---
+- name: Restart rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    state: stopped
+  ansible.builtin.service:
+    name: syslog.socket
+    state: stopped
+  ansible.builtin.service:
+    name: rsyslog
+    state: started
+
+- name: Stop rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    state: stopped
+
+- name: Stop syslog.socket
+  ansible.builtin.service:
+    name: syslog.socket
+    state: stopped
+
+- name: Start rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    state: started

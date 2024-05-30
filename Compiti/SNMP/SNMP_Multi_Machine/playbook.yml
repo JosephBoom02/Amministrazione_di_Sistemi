@@ -1,0 +1,23 @@
+---
+- hosts: agent1
+  become: true
+  roles:
+   - common
+   - agent
+   - rsyslog_a1
+
+- hosts: agent2
+  become: true
+  roles:
+   - common
+   - agent
+   - rsyslog_a2
+
+- hosts: controller
+  become: true
+  roles:
+   - common
+   - controller
+   - dnsmasq
+   - ipforward
+

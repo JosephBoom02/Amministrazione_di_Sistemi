@@ -1,0 +1,10 @@
+---
+- name: Abilitate eth1 dhcp
+  ansible.builtin.copy:
+    src: eth1
+    dest: /etc/network/interfaces.d/eth1
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart networking

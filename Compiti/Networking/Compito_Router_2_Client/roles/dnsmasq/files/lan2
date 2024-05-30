@@ -1,0 +1,6 @@
+interface=eth2                        
+dhcp-range=10.9.9.10,10.9.9.20,12h        
+dhcp-option=3,10.9.9.1       
+dhcp-option=option:ntp-server,10.9.9.1
+dhcp-option=option:dns-server,10.9.9.1
+dhcp-option=121,10.2.2.0/24,10.9.9.1

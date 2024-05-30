@@ -1,0 +1,1 @@
+rm /etc/rsyslog.d/mylog.service.conf
