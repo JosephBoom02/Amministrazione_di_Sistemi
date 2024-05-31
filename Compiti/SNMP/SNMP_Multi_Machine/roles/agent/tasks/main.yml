@@ -44,13 +44,17 @@
     line: Debian-snmp ALL=NOPASSWD:/usr/bin/rm /root/out.pcap
     path: /etc/sudoers
 
-- name: Copy ssh private key
+- name: Copy private key
   ansible.builtin.copy:
-    src: ssh-key
-    dest: /home/vagrant/.ssh/ftransfer-key
+    src: id_rsa
+    dest: /home/vagrant/.ssh/id_rsa
 
-- name: Copy ssh public key
+- name: Copy public key
   ansible.builtin.copy:
-    src: ssh-key.pub
-    dest: /home/vagrant/.ssh/ftransfer-key.pub
+    src: id_rsa.pub
+    dest: /home/vagrant/.ssh/id_rsa.pub
 
+- name: Add controller key to authorized_keys
+  ansible.builtin.lineinfile:
+    path: /home/vagrant/.ssh/authorized_keys
+    line: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAs7eLZj2bB5KPwHgHNO0kkkPhnjVv7p8MAy2i/ki+2AWtHnr5tZH+wEQJgaDVMf3Cf8Ja7SGGeCtwI8I6MzZA/N7huaFmyqUy5wHJzQTl3dK/vKt0ow8GfKWXtu2vTB6F9Hi7NNIMJXIb93hhSExBP46VaWJKuEP8qMi+6NIbfLlLqJZdLpc42pLbmCt1laXKPos0QHLjOaJikC2dt2k9dIxS8LD9kwiPS9ZK/D8ZQuxxIzqQpID9waV1ayTcS+Qg2ehl+OuGBz3JJIFQ53j8qMx1BpV3jwvg06dnMi7mRI1+NaBlDtd7AYtQubT4Jknl23EboP3ukzMw3k43iAPdYkTUPhWyfSvTUW1EUofqS6jUaBkh+/SSJWkp7V33YYYvPOFGzFkP8WAm4xW7/02koEGOr/h5gKlPEvNTJ40khrJcxDyhfRYONyuTqz5wMMimQJHfSjRbPgZ/9jxk/5xsbdwxsIIxALOGI2K1/z4aqqwVFyWY3s4bjDutwBb1Ro0= vagrant@controller"

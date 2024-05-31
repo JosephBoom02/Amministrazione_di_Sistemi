@@ -1,3 +1,8 @@
+if [[ $# -lt 4 ]]; then
+    echo "Sintassi: failkill.sh -f FILE -s SOGLIA"
+fi
+
+
 OPTSTRING=":f:s:"
 
 while getopts ${OPTSTRING} opt; do
@@ -17,10 +22,10 @@ while getopts ${OPTSTRING} opt; do
   esac
 done
 
-for host in $FILE ; do 
+for host in $(cat $FILE) ; do
+    echo "Checking host $host"
     val=$(bash failcount.sh $host | rev | cut -f1 -d: | rev | tr -d ' ')
     if [[ $val -gt $SOGLIA ]]; then
-        ssh -o "StrictHostKeyChecking no" $host
-        shutdown now
+        ssh -o "StrictHostKeyChecking no" $host "sudo systemctl poweroff"
     fi
 done

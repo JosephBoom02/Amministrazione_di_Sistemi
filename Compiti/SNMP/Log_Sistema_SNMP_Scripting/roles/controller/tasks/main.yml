@@ -49,10 +49,15 @@
     name: rsyslog
     state: restarted
 
-- name: Copy script
+- name: Copy failcount.sh 
   ansible.builtin.copy:
     src: failcount.sh
     dest: /home/vagrant/failcount.sh
+
+- name: Copy failkill.sh 
+  ansible.builtin.copy:
+    src: failkill.sh
+    dest: /home/vagrant/failkill.sh
 
 - name: Copy private key
   ansible.builtin.copy:
