@@ -1,0 +1,3 @@
+## Per abilitare la ricezione dei messaggi via rete:
+$ModLoad imudp 		/ 	module(load="imudp")
+$UDPServerRun 514 	/	input(type="imudp" port="514") 

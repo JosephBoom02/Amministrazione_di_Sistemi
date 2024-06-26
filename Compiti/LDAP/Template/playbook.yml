@@ -1,0 +1,10 @@
+---
+- hosts: server
+  become: true
+  roles:
+   - ldap_server
+
+- hosts: client
+  become: true
+  roles:
+   - ldap_login

@@ -1,0 +1,17 @@
+---
+ldap_login_ldapserver: 10.1.1.2
+ldap_login_libnss_ldapd:
+  - question: libnss-ldapd/clean_nsswitch
+    value: true
+    vtype: boolean
+  - question: libnss-ldapd/nsswitch
+    value: passwd, group, shadow
+    vtype: string
+
+ldap_login_nslcd:
+  - question: nslcd/ldap-uris
+    value: "ldap://{{ ldap_login_ldapserver }}/"
+    vtype: string
+  - question: nslcd/ldap-base
+    value: dc=labammsis
+    vtype: string

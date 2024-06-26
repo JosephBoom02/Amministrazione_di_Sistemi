@@ -1,0 +1,57 @@
+---
+- name: Configura networking
+  copy:
+    src: eth1
+    dest: /etc/network/interfaces.d/eth1
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart networking
+
+- name: Installa rsyslog
+  apt:
+    update_cache: yes
+    name: rsyslog
+    state: latest
+
+- name: Configura rsyslog
+  copy:
+    src: rsyslog.local.conf
+    dest: /etc/rsyslog.d/local.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart rsyslog
+
+- name: Installa watchdog.sh
+  copy:
+    src: watchdog.sh
+    dest: /usr/bin/watchdog.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Installa Systemd Unit per Watchdog
+  ansible.builtin.copy:
+    owner: root
+    group: root
+    mode: '0644'
+    src: 'watchdog.service'
+    dest: '/etc/systemd/system/watchdog.service'
+  notify: Start watchdog
+
+- name: Copy private key
+  ansible.builtin.copy:
+    src: id_rsa
+    dest: /home/vagrant/.ssh/id_rsa
+
+- name: Copy public key
+  ansible.builtin.copy:
+    src: id_rsa.pub
+    dest: /home/vagrant/.ssh/id_rsa.pub
+
+- name: Add server key to authorized_keys
+  ansible.builtin.lineinfile:
+    path: /home/vagrant/.ssh/authorized_keys
+    line: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDAs7eLZj2bB5KPwHgHNO0kkkPhnjVv7p8MAy2i/ki+2AWtHnr5tZH+wEQJgaDVMf3Cf8Ja7SGGeCtwI8I6MzZA/N7huaFmyqUy5wHJzQTl3dK/vKt0ow8GfKWXtu2vTB6F9Hi7NNIMJXIb93hhSExBP46VaWJKuEP8qMi+6NIbfLlLqJZdLpc42pLbmCt1laXKPos0QHLjOaJikC2dt2k9dIxS8LD9kwiPS9ZK/D8ZQuxxIzqQpID9waV1ayTcS+Qg2ehl+OuGBz3JJIFQ53j8qMx1BpV3jwvg06dnMi7mRI1+NaBlDtd7AYtQubT4Jknl23EboP3ukzMw3k43iAPdYkTUPhWyfSvTUW1EUofqS6jUaBkh+/SSJWkp7V33YYYvPOFGzFkP8WAm4xW7/02koEGOr/h5gKlPEvNTJ40khrJcxDyhfRYONyuTqz5wMMimQJHfSjRbPgZ/9jxk/5xsbdwxsIIxALOGI2K1/z4aqqwVFyWY3s4bjDutwBb1Ro0= vagrant@server"

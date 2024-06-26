@@ -1,0 +1,64 @@
+---
+- name: Copy a new eth1 configuration "interfaces" file into place, after passing validation with ifup
+  ansible.builtin.copy:
+    src: r1eth1
+    dest: /etc/network/interfaces.d/eth1
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart Networking
+
+- name: Copy a new eth2 configuration "interfaces" file into place, after passing validation with ifup
+  ansible.builtin.copy:
+    src: r1eth2
+    dest: /etc/network/interfaces.d/eth2
+    validate: /usr/sbin/ifup --no-act -i %s eth2
+  notify: Restart Networking
+
+- name: Copy sources.list
+  become: true
+  ansible.builtin.copy:
+    src: sources.list
+    dest: /etc/apt/sources.list
+  notify: Restart Networking
+
+- name: "Update all packages"
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install snmp
+  ansible.builtin.apt:
+    name: snmp
+    state: present
+
+- name: Install snmp-mibs-downloader
+  ansible.builtin.apt:
+    name: snmp-mibs-downloader
+    state: present
+
+- name: Activate mibs
+  ansible.builtin.command:
+    cmd: sudo sed -i 's/mibs :/# mibs :/g' /etc/snmp/snmp.conf
+
+- name: Install snmp
+  ansible.builtin.apt:
+    name: tcpdump
+    state: present
+
+- name: Copy syslog configuration
+  ansible.builtin.copy:
+    src: rsyslog.conf
+    dest: '/etc/rsyslog.d/'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify: Restart rsyslog
+
+- name: Copy scripts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: '/usr/bin/'
+    owner: 'root'
+    group: 'root'
+    mode: '0740'
+  loop:
+    - connection-monitor.sh
+    - netmon.sh

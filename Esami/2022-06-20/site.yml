@@ -1,0 +1,23 @@
+---
+- hosts: router
+  become: true
+  roles:
+   - common
+   - netr1
+   - ipforward
+   - dnsmasqr1
+
+- hosts: client1
+  become: true
+  roles:
+   - common
+   - client
+   - agent
+
+- hosts: server
+  become: true
+  roles:
+   - common
+   - server
+   - controller
+

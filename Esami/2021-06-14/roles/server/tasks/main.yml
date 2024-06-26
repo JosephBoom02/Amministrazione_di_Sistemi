@@ -1,0 +1,65 @@
+---
+- name: Configura networking
+  copy:
+    src: eth1
+    dest: /etc/network/interfaces.d/eth1
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/ifup --no-act -i %s eth1
+  notify: Restart networking
+
+- name: Enable Contrib Non-Free
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list
+    regexp: 'main$'
+    replace: 'main contrib non-free'
+
+- name: Installa snmp snmp-mibs-downloader
+  ansible.builtin.apt:
+    name: [ snmp, snmp-mibs-downloader ]
+    update_cache: true
+
+- name: Enable MIBS
+  ansible.builtin.replace:
+    path: /etc/snmp/snmp.conf
+    regexp: '^mibs :'
+    replace: '# mibs :'
+
+- name: Installa failback.sh
+  copy:
+    src: failback.sh
+    dest: /usr/bin/failback.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Copy private key
+  ansible.builtin.copy:
+    src: id_rsa
+    dest: /home/vagrant/.ssh/id_rsa
+
+- name: Copy public key
+  ansible.builtin.copy:
+    src: id_rsa.pub
+    dest: /home/vagrant/.ssh/id_rsa.pub
+
+- name: Add client key to authorized_keys
+  ansible.builtin.lineinfile:
+    path: /home/vagrant/.ssh/authorized_keys
+    line: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDcj29EPmwXFlAmkng92BFjDaoso1bCWv+2Z1QgLZZNF2+lAOlQf+TOpCcGwoO1a+oj7Amz1LnsPdzaFHtVYjSaFa8LQgxZWmKEWPbOroMk4ShESYfCvMlBQfNr7oC1EXu8L+s0aHxNWvHSGeqV+/X3b5sGIMWSSdF46VSpOArLC0gIY7/omMejK9NukNCw6SDTf8dUnYF6VZ0MElVJoa1fjvL9wcc4mW+1SSHROP3BOIsMB6SnboIvvuddT2DkfqY4oatpb3uT7rGGEPecOKQnkU40YcFK8z/Ey+A3YHKtQaRm7E+gV0tSJHTMROxSbV/qod/kxyI9Pqw2yf+qML59E19fSa+kelNj4w+BZ+Fna/9xeaIbv2PqYnC108WiLYfwHgXYirgh5enhNbZctKgO1h/iqfcD6ae1aFrcqoKdPmBE/+Zs8D3+zl1xA8HbJ6NEDzMXFc/puZ1VFTYw8auBhJjmd3FQjeh9WZSjxsvVrYq0kSt5ViZlGxfjcSj/z/M= vagrant@client1
+
+- name: Install Slapd
+  apt:
+    update_cache: yes
+    name: [ 'slapd', 'ldap-utils' ]
+    state: latest
+
+- name: Move user temp on LDAP server
+  copy:
+    src: temp.ldif
+    dest: /root/temp.ldif
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Add user temp on LDAP

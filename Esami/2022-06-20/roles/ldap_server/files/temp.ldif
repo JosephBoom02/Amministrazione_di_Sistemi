@@ -1,0 +1,16 @@
+dn: uid=temp,ou=People,dc=labammsis
+objectClass: top
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: inetOrgPerson
+givenName: temp
+cn: temp
+sn: Berardi
+mail: temp@unibo.it
+uid: temp
+uidNumber: 10000
+gidNumber: 10000
+homeDirectory: /home/temp
+loginShell: /bin/bash
+gecos:temp "temp"
+userPassword: {crypt}x

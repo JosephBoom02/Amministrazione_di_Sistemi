@@ -1,0 +1,11 @@
+---
+- name: Copy 50-default.conf
+  become: true
+  ansible.builtin.copy:
+    src: 50-default.conf
+    dest: /etc/rsyslog.d/50-default.conf
+
+- name: Restart rsyslog
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted

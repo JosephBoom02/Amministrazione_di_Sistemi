@@ -1,0 +1,1 @@
+Questa configurazione imposta al client e al server inidirizzi statici riconoscendo i loro MAC address utilizzando dnsmasq

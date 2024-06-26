@@ -1,0 +1,6 @@
+---
+- name: Configura scheduling failback.sh
+  cron:
+    name: failback.sh
+    job: /usr/bin/failback.sh
+    minute: '1-58/2'

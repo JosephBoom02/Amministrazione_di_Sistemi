@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - role: common
+
+- hosts: router
+  become: true
+  roles:
+    - role: router
+
+- hosts: server1
+  become: true
+  roles:
+    - role: server
+    - role: even_minutes
+
+- hosts: server1
+  become: true
+  roles:
+    - role: server
+    - role: odd_minutes
+
+- hosts: client1
+  become: true
+  roles:
+    - role: client

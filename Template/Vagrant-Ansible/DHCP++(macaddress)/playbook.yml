@@ -1,0 +1,20 @@
+---
+- hosts: router
+  become: true
+  roles:
+   - common
+   - netr1
+   - ipforward
+   - dnsmasq
+
+- hosts: client
+  become: true
+  roles:
+   - common
+   - eth1_dhcp
+
+- hosts: server
+  become: true
+  roles:
+   - common
+   - eth1_dhcp

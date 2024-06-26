@@ -1,0 +1,27 @@
+---
+- hosts: client-*
+  become: true
+  roles:
+   - common
+   - client
+
+- hosts: r1
+  become: true
+  roles:
+   - common
+   - netr1
+   - ipforward
+   - dnsmasqr1
+
+- hosts: r2
+  become: true
+  roles:
+   - common
+   - ipforward
+   - netr2
+
+- hosts: server
+  become: true
+  roles:
+   - common
+   - netserver

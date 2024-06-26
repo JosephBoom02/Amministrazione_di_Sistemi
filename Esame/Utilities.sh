@@ -1375,3 +1375,36 @@ done
 ## Saltare la verifica dell'host nel file known_hosts in ssh
 ssh -o "StrictHostKeyChecking no" $host
 
+## Inserire l'output di un comando in un array (in questo caso l'ouput originale ha un ogni elemento che vogliamo inserire nell'array su ogni riga, per questo usiamo tr '\n' ' ')
+read -ra array <<< "$(ps aux | grep '^vagrant' | awk '{ print $2 }' | tr '\n' ' '))"
+
+## array loop/cycle
+for i in "${arr[@]}"; do
+    # access each element 
+    # as $i
+    echo $i
+done
+
+## iterare/ciclare su un range di ip
+## in questo caso il range è tra 10.100.2.1 e 10.100.7.254
+PREFIX="10.100."
+for HOSTID in 2.{1..255} {3..6}.{0..255} 7.{0..254} ; do
+	"$PREFIX$HOSTID"  
+done
+
+## DHCPLEASE
+DHCPLEASE="/var/lib/misc/dnsmasq.leases"
+AGENT1IPv4=""
+AGENT2IPv4=""
+
+while read -r ID MACADDRESS IPv4 HOSTNAME IPv6 ; do 
+	## hostname esempio: client
+	## ipv4 esempio: 10.100.1.2
+done < "$DHCPLEASE"
+
+## CRON Avviare uno script oggni minuto
+1-59/2 * * * * for odd minutes (dispari)
+1-58/2 * * * * for even minutes (pari)
+
+## aggiungere una interfaccia
+sudo ip link add eth3 type dummy
