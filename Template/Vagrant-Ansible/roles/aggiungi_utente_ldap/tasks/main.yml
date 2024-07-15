@@ -1,0 +1,8 @@
+- name: Move user temp on LDAP server
+  copy:
+    src: temp.ldif
+    dest: /root/temp.ldif
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Add user temp on LDAP

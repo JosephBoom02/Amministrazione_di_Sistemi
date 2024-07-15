@@ -1,0 +1,11 @@
+[Unit]
+Description=Run get-users.sh 
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/get-users.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

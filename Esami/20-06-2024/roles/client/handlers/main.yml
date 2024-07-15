@@ -1,0 +1,12 @@
+---
+- name: Restart Networking
+  ansible.builtin.service:
+    name: networking
+    state: restarted
+
+- name: Start get-users
+  ansible.builtin.systemd:
+    name: get-users
+    state: started
+    enabled: true
+    daemon_reload: true

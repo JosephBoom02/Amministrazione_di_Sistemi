@@ -1,0 +1,17 @@
+---
+- name: Installa watchdog.sh
+  copy:
+    src: watchdog.sh
+    dest: /usr/bin/watchdog.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Installa Systemd Unit per Watchdog
+  ansible.builtin.copy:
+    owner: root
+    group: root
+    mode: '0644'
+    src: 'watchdog.service'
+    dest: '/etc/systemd/system/watchdog.service'
+  notify: Start watchdog

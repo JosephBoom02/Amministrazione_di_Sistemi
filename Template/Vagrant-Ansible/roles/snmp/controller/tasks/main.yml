@@ -1,0 +1,33 @@
+---
+- name: Enable Contrib Non-Free
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list
+    regexp: 'main$'
+    replace: 'main contrib non-free'
+
+- name: Install SNMP and Mibs
+  ansible.builtin.apt:
+    name: [ snmp, snmp-mibs-downloader ]
+    update_cache: true
+
+- name: Enable MIBS
+  ansible.builtin.replace:
+    path: /etc/snmp/snmp.conf
+    regexp: '^mibs :'
+    replace: '# mibs :'
+
+- name: Installa create-home.sh
+  copy:
+    src: create-home.sh
+    dest: bin/create-home.sh
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Configura scheduling create-home.sh
+  cron:
+    name: create-home.sh
+    job: /bin/create-home.sh
+    hour: '6-22'
+    minute: '1-58/2'
+    weekday: '1-6'

@@ -1,0 +1,13 @@
+---
+- name: Restart Networking
+  ansible.builtin.service:
+    name: networking
+    state: restarted
+
+- name: Reload sysctl
+  ansible.builtin.command: /usr/sbin/sysctl -p
+
+- name: Restart dnsmasq
+  ansible.builtin.service:
+    name: dnsmasq
+    state: restarted
